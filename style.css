@@ -6,7 +6,25 @@ html {
 h1 {text-align: center;
     font-weight: bold;
                       }
-.teks-berjalan {
+.teks berjalan  {
     white-space: nowrap;
   
     animation: jalan 10s linear infinite; gw
+  
+  
+  color: blue
+}
+
+@keyframes jalan {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+body {background-color: aqua;
+      border:6px solid gray;
+     border-radius:25px;}
