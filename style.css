@@ -1,8 +1,8 @@
 html 
-  Ul { List_style_type : none ; 
+  ul { list_style_type : none ; 
 padding:16px
 }
-Li { display :inline;
+li { display :inline;
     padding-left: 4px solid gray;
     padding-right: 4px solid gray;
    }
