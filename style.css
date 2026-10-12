@@ -1,21 +1,26 @@
 html {
   height: 100%;
 }
+
 h1 {text-align:center;color:yellow;
    font-weight:bold;
    }
+
     p {text-align:right;
       font-family:times new roman;
       font-size:11;
        color:white;
       }
+
 body {background-color:blue;
       border:6px white;
       border-radius:25px;
      }
 
 ul {list-style-type:none;}
+
 li {display:inline;
    }
+
 img {width:100px;
     }
