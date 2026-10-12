@@ -14,3 +14,8 @@ body {background-color:blue;
       border-radius:25px;
      }
 
+ul {list-style-type:none;}
+li {display:inline;
+   }
+img {width:100px;
+    }
