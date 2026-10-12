@@ -7,10 +7,10 @@ h1 {text-align:center;color:yellow;
     p {text-align:right;
       font-family:times new roman;
       font-size:11;
-       color:aqua;
+       color:black;
       }
-body {background-color:violet;
-      border:6px solid blue;
+body {background-color:blue;
+      border:6px white;
       border-radius:25px;
      }
 
