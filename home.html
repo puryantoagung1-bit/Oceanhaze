@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ocean Haze - Beranda</title>
+    <!-- Google Fonts & FontAwesome untuk Ikon -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Kustom Mouse Pointer bertema Ocean */
+        body, html {
+            cursor: url('https://img.icons8.com/color/24/water.png'), auto;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            color: #fff;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Background Gambar Underwater Cartoon dengan Efek Overlay Gelap agar Teks Jelas */
+        .ocean-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(rgba(10, 30, 50, 0.6), rgba(10, 20, 35, 0.7)), 
+                        url('view-underwater-sea-life-cartoon-style.jpg') no-repeat center center fixed;
+            background-size: cover;
+            z-index: -1;
+        }
+
+        /* Navigasi / Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: rgba(15, 32, 39, 0.85);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-title img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #00d2ff;
+        }
+
+        .logo-title h1 {
+            font-size: 1.5rem;
+            margin: 0;
+            background: linear-gradient(to right, #00d2ff, #3a7bd5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        nav a {
+            color: #ccc;
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        nav a:hover, nav a.active {
+            color: #00d2ff;
+            text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+        }
+
+        /* Konten Utama */
+        .container {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .hero-card {
+            background: rgba(15, 32, 39, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            margin-bottom: 40px;
+        }
+
+        .main-logo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #00d2ff;
+            box-shadow: 0 0 25px rgba(0, 210, 255, 0.6);
+            margin-bottom: 20px;
+            transition: transform 0.5s;
+        }
+
+        .main-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .philosophy-box {
+            text-align: left;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 5px solid #00d2ff;
+            margin-top: 25px;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        /* Tombol Kustom untuk Canva */
+        .tombol {
+            display: inline-block;
+            background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+            color: #fff;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0, 210, 255, 0.4);
+            transition: 0.3s;
+        }
+
+        .tombol:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 210, 255, 0.6);
+            color: #fff;
+        }
+
+        .canva-credits {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #bbb;
+        }
+
+        .canva-credits a {
+            color: #00d2ff;
+            text-decoration: none;
+        }
+
+        .canva-credits a:hover {
+            text-decoration: underline;
+        }
+
+        /* Backsound Control Button */
+        .audio-control {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #00d2ff;
+            color: #0f2027;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            font-size: 1.2rem;
+            z-index: 1000;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .audio-control:hover {
+            transform: scale(1.1);
+            background: #fff;
+        }
+
+        /* Footer Credential */
+        footer {
+            background: rgba(10, 20, 25, 0.95);
+            padding: 30px 20px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 80px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #00d2ff;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+            text-shadow: 0 0 8px #00d2ff;
+        }
+
+        footer p {
+            color: #888;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Gambar Bawah Laut -->
+    <div class="ocean-bg"></div>
+
+    <!-- Navigasi Website -->
+    <header>
+        <div class="logo-title">
+            <img src="logo1.jpg" alt="Logo Ocean Haze" onerror="this.src='https://via.placeholder.com/45'">
+            <h1>Ocean Haze</h1>
+        </div>
+        <nav>
+            <a href="Home.html" class="active">Home</a>
+            <a href="Desain.html">Desain</a>
+            <a href="Product.html">Product</a>
+        </nav>
+    </header>
+
+    <!-- Konten Beranda -->
+    <div class="container">
+        <div class="hero-card">
+            <!-- Logo Utama -->
+            <img src="logo1.jpg" alt="Logo Ocean Haze" class="main-logo" onerror="this.src='https://via.placeholder.com/150'">
+            <h2>Selamat Datang di Kelompok Ocean Haze</h2>
+            <p>Website Resmi Tugas Kelompok Informatika</p>
+
+            <!-- Filosofi Logo -->
+            <div class="philosophy-box">
+                <h3 style="margin-top: 0; color: #00d2ff;"><i class="fa-solid fa-anchor"></i> Filosofi Logo Ocean Haze</h3>
+                <p>
+                    Logo Oceanhaze memiliki filosofi bahwa sebuah kelompok ibarat kapal yang berlayar di lautan luas. 
+                    Dengan arah yang jelas, kerja sama yang kuat, dan rasa saling percaya, setiap anggota dapat menghadapi 
+                    tantangan bersama serta mencapai tujuan yang telah disepakati. Logo ini menjadi simbol persatuan, 
+                    tanggung jawab, dan semangat untuk terus berkembang sebagai sebuah kelompok.
+                </p>
+            </div>
+        </div>
+
+        <!-- Frame Embed Slide Canva -->
+        <div class="hero-card">
+            <h3 style="color: #00d2ff; margin-top: 0;"><i class="fa-solid fa-presentation-screen"></i> Presentasi Proyek & Slide Canva</h3>
+            <p style="color: #bbb; font-size: 0.95rem;">Berikut adalah materi presentasi dan rancangan tugas kelompok kami:</p>
+            
+            <div style="position: relative; width: 100%; height: 0; padding-top: 56.2500%; padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden; border-radius: 8px; will-change: transform;">
+                <iframe loading="lazy" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0; margin: 0;"
+                    src="https://www.canva.com/design/DAHXHnWVljQ/9hbPjhx41VE2E7U8H_aywQ/view?embed" allowfullscreen="allowfullscreen" allow="fullscreen">
+                </iframe>
+            </div>
+
+            <div class="canva-credits">
+                <a href="https://www.canva.com/design/DAHXHnWVljQ/9hbPjhx41VE2E7U8H_aywQ/view?utm_content=DAHXHnWVljQ&amp;utm_campaign=designshare&amp;utm_medium=embeds&amp;utm_source=link" target="_blank" rel="noopener">Blue and Green Illustrated Sea Life Presentation</a> oleh Aisah Sandra Dewi
+            </div>
+
+            <a href="https://canva.link/8p2ozuhrlakd3a4" target="_blank" rel="noopener" class="tombol">
+                <i class="fa-solid fa-external-link-alt"></i> Buka di Canva
+            </a>
+        </div>
+    </div>
+
+    <!-- Tombol Backsound Interaktif & Autoplay -->
+    <audio id="bgm" loop autoplay>
+        <source src="Ocean-Haze-Piano.mp3" type="audio/mpeg">
+        Browser Anda tidak mendukung audio element.
+    </audio>
+    <button class="audio-control" id="audioBtn" onclick="toggleAudio()" title="Putar/Hentikan Musik">
+        <i class="fa-solid fa-volume-high" id="audioIcon"></i>
+    </button>
+
+    <!-- Footer / Credential Akun -->
+    <footer>
+        <div class="footer-links">
+            <a href="https://sman71.sch.id/" target="_blank"><i class="fa-solid fa-school"></i> Website SMAN 71 Jakarta</a>
+            <a href="https://www.instagram.com/sman71jakarta/" target="_blank"><i class="fa-brands fa-instagram"></i> Instagram SMAN 71 Jakarta</a>
+            <a href="https://www.youtube.com/channel/UCcI6dd5XcopDlPktm4pVB6A" target="_blank"><i class="fa-brands fa-youtube"></i> YouTube SMAN 71 Jakarta</a>
+        </div>
+        <p>&copy; 2026 Ocean Haze - Tugas Informatika SMAN 71 Jakarta. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        const bgm = document.getElementById('bgm');
+        const audioBtn = document.getElementById('audioBtn');
+        const audioIcon = document.getElementById('audioIcon');
+        let isPlaying = true;
+
+        // Coba langsung mainkan musik saat halaman dimuat
+        window.addEventListener('DOMContentLoaded', () => {
+            bgm.volume = 0.8;
+            bgm.play().then(() => {
+                audioIcon.className = "fa-solid fa-volume-high";
+                audioBtn.style.background = "#2ecc71";
+                isPlaying = true;
+            }).catch(error => {
+                // Jika diblokir browser, aktifkan begitu ada interaksi klik/sentuh pertama di halaman
+                console.log("Autoplay dicegah browser, menunggu interaksi pengguna...");
+                audioIcon.className = "fa-solid fa-music";
+                audioBtn.style.background = "#00d2ff";
+                isPlaying = false;
+
+                const unlockAudio = () => {
+                    bgm.play().then(() => {
+                        audioIcon.className = "fa-solid fa-volume-high";
+                        audioBtn.style.background = "#2ecc71";
+                        isPlaying = true;
+                        window.removeEventListener('click', unlockAudio);
+                        window.removeEventListener('keydown', unlockAudio);
+                        window.removeEventListener('mousemove', unlockAudio);
+                    }).catch(e => console.log(e));
+                };
+
+                window.addEventListener('click', unlockAudio);
+                window.addEventListener('keydown', unlockAudio);
+                window.addEventListener('mousemove', unlockAudio);
+            });
+        });
+
+        function toggleAudio() {
+            if (isPlaying) {
+                bgm.pause();
+                audioIcon.className = "fa-solid fa-music";
+                audioBtn.style.background = "#00d2ff";
+            } else {
+                bgm.play().then(() => {
+                    audioIcon.className = "fa-solid fa-volume-high";
+                    audioBtn.style.background = "#2ecc71";
+                });
+            }
+            isPlaying = !isPlaying;
+        }
+    </script>
+</body>
+</html>
