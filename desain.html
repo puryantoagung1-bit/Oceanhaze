@@ -46,10 +46,17 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
+        /* Styling untuk Link Logo & Judul */
+        .logo-title-link {
+            text-decoration: none;
+            display: inline-block;
+        }
+
         .logo-title {
             display: flex;
             align-items: center;
             gap: 15px;
+            cursor: pointer;
         }
 
         .logo-title img {
@@ -58,6 +65,11 @@
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid #00d2ff;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-title-link:hover .logo-title img {
+            transform: scale(1.05);
         }
 
         .logo-title h1 {
@@ -176,6 +188,32 @@
             box-shadow: 0 8px 25px rgba(0, 210, 255, 0.7);
         }
 
+        /* Backsound Control Button */
+        .audio-control {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #00d2ff;
+            color: #0f2027;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            font-size: 1.2rem;
+            z-index: 1000;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .audio-control:hover {
+            transform: scale(1.1);
+            background: #fff;
+        }
+
         /* Footer Credential */
         footer {
             background: rgba(10, 20, 25, 0.95);
@@ -222,10 +260,12 @@
 
     <!-- Navigasi Website -->
     <header>
-        <div class="logo-title">
-            <img src="logo1.jpg" alt="Logo Ocean Haze" onerror="this.src='https://via.placeholder.com/45'">
-            <h1>Ocean Haze</h1>
-        </div>
+        <a href="index.html" class="logo-title-link">
+            <div class="logo-title">
+                <img src="logo1.jpg" alt="Logo Ocean Haze" onerror="this.src='https://via.placeholder.com/45'">
+                <h1>Ocean Haze</h1>
+            </div>
+        </a>
         <nav>
             <a href="index.html">Home</a>
             <a href="desain.html" class="active">Desain</a>
@@ -281,6 +321,15 @@
 
     </div>
 
+    <!-- Tombol Backsound Interaktif & Sinkronisasi Antar Laman -->
+    <audio id="bgm" loop>
+        <source src="Ocean-Haze-Piano.mp3" type="audio/mpeg">
+        Browser Anda tidak mendukung audio element.
+    </audio>
+    <button class="audio-control" id="audioBtn" onclick="toggleAudio()" title="Putar/Hentikan Musik">
+        <i class="fa-solid fa-volume-high" id="audioIcon"></i>
+    </button>
+
     <!-- Footer / Credential Akun -->
     <footer>
         <div class="footer-links">
@@ -291,5 +340,86 @@
         <p>&copy; 2026 Ocean Haze - Tugas Informatika SMAN 71 Jakarta. All Rights Reserved.</p>
     </footer>
 
+	<script>
+		const bgm = document.getElementById('bgm');
+		const audioBtn = document.getElementById('audioBtn');
+		const audioIcon = document.getElementById('audioIcon');
+
+		window.addEventListener('DOMContentLoaded', () => {
+			bgm.volume = 0.8;
+
+			let savedTime = parseFloat(localStorage.getItem('bgmCurrentTime')) || 0;
+			let isPlaying = localStorage.getItem('bgmPlaying') === 'true';
+
+			bgm.currentTime = savedTime;
+
+			if (isPlaying) {
+				updateButtonUI(true);
+				bgm.play().then(() => {
+					startTrackingTime();
+				}).catch(error => {
+					console.log("Autoplay dicegah browser, menunggu interaksi pengguna...");
+					isPlaying = false;
+					localStorage.setItem('bgmPlaying', 'false');
+					updateButtonUI(false);
+					setupUnlockListener();
+				});
+			} else {
+				bgm.pause();
+				updateButtonUI(false);
+				setupUnlockListener();
+			}
+		});
+
+		function startTrackingTime() {
+			setInterval(() => {
+				if (!bgm.paused) {
+					localStorage.setItem('bgmCurrentTime', bgm.currentTime);
+				}
+			}, 500);
+		}
+
+		function toggleAudio() {
+			if (!bgm.paused) {
+				bgm.pause();
+				localStorage.setItem('bgmPlaying', 'false');
+				updateButtonUI(false);
+			} else {
+				bgm.play().then(() => {
+					localStorage.setItem('bgmPlaying', 'true');
+					updateButtonUI(true);
+					startTrackingTime();
+				});
+			}
+		}
+
+		function updateButtonUI(playing) {
+			if (playing) {
+				audioIcon.className = "fa-solid fa-volume-high";
+				audioBtn.style.background = "#2ecc71";
+			} else {
+				audioIcon.className = "fa-solid fa-music";
+				audioBtn.style.background = "#00d2ff";
+			}
+		}
+
+		function setupUnlockListener() {
+			const unlockAudio = () => {
+				if (localStorage.getItem('bgmPlaying') === 'true') {
+					bgm.play().then(() => {
+						updateButtonUI(true);
+						startTrackingTime();
+						window.removeEventListener('click', unlockAudio);
+						window.removeEventListener('keydown', unlockAudio);
+						window.removeEventListener('mousemove', unlockAudio);
+					}).catch(e => console.log(e));
+				}
+			};
+
+			window.addEventListener('click', unlockAudio);
+			window.addEventListener('keydown', unlockAudio);
+			window.addEventListener('mousemove', unlockAudio);
+		}
+	</script>
 </body>
 </html>
