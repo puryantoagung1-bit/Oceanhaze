@@ -46,10 +46,17 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
+        /* Styling untuk Link Logo & Judul */
+        .logo-title-link {
+            text-decoration: none;
+            display: inline-block;
+        }
+
         .logo-title {
             display: flex;
             align-items: center;
             gap: 15px;
+            cursor: pointer;
         }
 
         .logo-title img {
@@ -58,6 +65,11 @@
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid #00d2ff;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-title-link:hover .logo-title img {
+            transform: scale(1.05);
         }
 
         .logo-title h1 {
@@ -232,10 +244,12 @@
 
     <!-- Navigasi Website -->
     <header>
-        <div class="logo-title">
-            <img src="logo1.jpg" alt="Logo Ocean Haze" onerror="this.src='https://via.placeholder.com/45'">
-            <h1>Ocean Haze</h1>
-        </div>
+        <a href="index.html" class="logo-title-link">
+            <div class="logo-title">
+                <img src="logo1.jpg" alt="Logo Ocean Haze" onerror="this.src='https://via.placeholder.com/45'">
+                <h1>Ocean Haze</h1>
+            </div>
+        </a>
         <nav>
             <a href="index.html" class="active">Home</a>
             <a href="desain.html">Desain</a>
@@ -284,8 +298,8 @@
         </div>
     </div>
 
-    <!-- Tombol Backsound Interaktif & Autoplay -->
-    <audio id="bgm" loop autoplay>
+    <!-- Tombol Backsound Interaktif & Sinkronisasi Antar Laman -->
+    <audio id="bgm" loop>
         <source src="Ocean-Haze-Piano.mp3" type="audio/mpeg">
         Browser Anda tidak mendukung audio element.
     </audio>
@@ -303,56 +317,91 @@
         <p>&copy; 2026 Ocean Haze - Tugas Informatika SMAN 71 Jakarta. All Rights Reserved.</p>
     </footer>
 
-    <script>
-        const bgm = document.getElementById('bgm');
-        const audioBtn = document.getElementById('audioBtn');
-        const audioIcon = document.getElementById('audioIcon');
-        let isPlaying = true;
+	<script>
+		const bgm = document.getElementById('bgm');
+		const audioBtn = document.getElementById('audioBtn');
+		const audioIcon = document.getElementById('audioIcon');
 
-        // Coba langsung mainkan musik saat halaman dimuat
-        window.addEventListener('DOMContentLoaded', () => {
-            bgm.volume = 0.8;
-            bgm.play().then(() => {
-                audioIcon.className = "fa-solid fa-volume-high";
-                audioBtn.style.background = "#2ecc71";
-                isPlaying = true;
-            }).catch(error => {
-                // Jika diblokir browser, aktifkan begitu ada interaksi klik/sentuh pertama di halaman
-                console.log("Autoplay dicegah browser, menunggu interaksi pengguna...");
-                audioIcon.className = "fa-solid fa-music";
-                audioBtn.style.background = "#00d2ff";
-                isPlaying = false;
+		window.addEventListener('DOMContentLoaded', () => {
+			bgm.volume = 0.8;
 
-                const unlockAudio = () => {
-                    bgm.play().then(() => {
-                        audioIcon.className = "fa-solid fa-volume-high";
-                        audioBtn.style.background = "#2ecc71";
-                        isPlaying = true;
-                        window.removeEventListener('click', unlockAudio);
-                        window.removeEventListener('keydown', unlockAudio);
-                        window.removeEventListener('mousemove', unlockAudio);
-                    }).catch(e => console.log(e));
-                };
+			// Ambil waktu dan status terakhir dari localStorage
+			let savedTime = parseFloat(localStorage.getItem('bgmCurrentTime')) || 0;
+			let isPlaying = localStorage.getItem('bgmPlaying') === 'true'; // Default false kecuali diset true
 
-                window.addEventListener('click', unlockAudio);
-                window.addEventListener('keydown', unlockAudio);
-                window.addEventListener('mousemove', unlockAudio);
-            });
-        });
+			bgm.currentTime = savedTime;
 
-        function toggleAudio() {
-            if (isPlaying) {
-                bgm.pause();
-                audioIcon.className = "fa-solid fa-music";
-                audioBtn.style.background = "#00d2ff";
-            } else {
-                bgm.play().then(() => {
-                    audioIcon.className = "fa-solid fa-volume-high";
-                    audioBtn.style.background = "#2ecc71";
-                });
-            }
-            isPlaying = !isPlaying;
-        }
-    </script>
+			if (isPlaying) {
+				updateButtonUI(true);
+				bgm.play().then(() => {
+					startTrackingTime();
+				}).catch(error => {
+					console.log("Autoplay dicegah browser, menunggu interaksi pengguna...");
+					isPlaying = false;
+					localStorage.setItem('bgmPlaying', 'false');
+					updateButtonUI(false);
+					setupUnlockListener();
+				});
+			} else {
+				bgm.pause();
+				updateButtonUI(false);
+				setupUnlockListener();
+			}
+		});
+
+		// Simpan posisi waktu lagu setiap 0.5 detik ke localStorage
+		function startTrackingTime() {
+			setInterval(() => {
+				if (!bgm.paused) {
+					localStorage.setItem('bgmCurrentTime', bgm.currentTime);
+				}
+			}, 500);
+		}
+
+		// Fungsi tombol play/pause
+		function toggleAudio() {
+			if (!bgm.paused) {
+				bgm.pause();
+				localStorage.setItem('bgmPlaying', 'false');
+				updateButtonUI(false);
+			} else {
+				bgm.play().then(() => {
+					localStorage.setItem('bgmPlaying', 'true');
+					updateButtonUI(true);
+					startTrackingTime();
+				});
+			}
+		}
+
+		// Mengubah tampilan ikon dan warna tombol
+		function updateButtonUI(playing) {
+			if (playing) {
+				audioIcon.className = "fa-solid fa-volume-high";
+				audioBtn.style.background = "#2ecc71"; // Hijau saat menyala
+			} else {
+				audioIcon.className = "fa-solid fa-music";
+				audioBtn.style.background = "#00d2ff"; // Biru saat mati
+			}
+		}
+
+		// Membuka blokir audio jika kebijakan browser mencegah autoplay
+		function setupUnlockListener() {
+			const unlockAudio = () => {
+				if (localStorage.getItem('bgmPlaying') === 'true') {
+					bgm.play().then(() => {
+						updateButtonUI(true);
+						startTrackingTime();
+						window.removeEventListener('click', unlockAudio);
+						window.removeEventListener('keydown', unlockAudio);
+						window.removeEventListener('mousemove', unlockAudio);
+					}).catch(e => console.log(e));
+				}
+			};
+
+			window.addEventListener('click', unlockAudio);
+			window.addEventListener('keydown', unlockAudio);
+			window.addEventListener('mousemove', unlockAudio);
+		}
+	</script>
 </body>
 </html>
