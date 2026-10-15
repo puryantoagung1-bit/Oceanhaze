@@ -663,7 +663,7 @@
                 ) {
                     obstacles.splice(i, 1);
                     lives--;
-                    document.getElementById("livesDisplay").innerText = "❤️❤️❤️".substring(0, lives);
+                    document.getElementById("livesDisplay").innerText = "❤️".repeat(lives);
                     
                     if(lives <= 0) {
                         gameOver();
